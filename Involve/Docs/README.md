@@ -222,8 +222,38 @@ Con información previa cargar el estado `https://dev.micros.involverh.com.mx/ma
 ]
 ```
 
-----
+-
 ### Dudas
 
-1. ¿Cómo obtener el keySystem?
-2. En los catálogos se envía un parámetro `status:true` ¿qué significa?
+1. En los catálogos se envía un parámetro `status:true` ¿qué significa?
+
+-
+### Changelog
+
+03/14/2023: 
+
+- Actualización de Endpoint en ciudades. Actualización de modelos de ciudades impacta a las siguientes clases: `Paso8.java`, `Paso9.java`, `Paso10.java`, `InformacionPersonal.java`, `CityAdapter.java`
+
+-
+# Análisis
+
+La aplicación Involve RH carece de arquitectura, patrones de diseño, lineamientos de desarrollo de aplicaciones Android violando todos los principios y no permitiéndo un mantenimiento _fácil_ y reduciendo sus oportunidades de escalabilidad en gran manera. Tiene deuda técnica por todos lados, utiliza tecnología antigua comparado al tiempo de la fecha del último _commit_ visible en el proyecto. Existe poca o nula reutilización de código, en el código puedes ver esta misma sentencia al menos 11 veces, mismo nombre `verifyUser` sin tener sentido el nombre de la variable con la intención de la sentencia, sin agregar el `Disposable` a un `CompositeDisposable` permitiendo la ejecución de estas tareas asíncronas aún después de que la actividad no sea visible.
+
+Si buscamos algo de principios SOLID dentro del código fallamos en todos, empezando por responsabilidad única: se puede revisar el archivo `FileUtils.java` en el cuál se puede apreciar cómo tiene distintas funcionalidades más allá de los archivos, teniendo dentro de sí `SharedPreferences`, sentencias relacionadas a lógica de negocio y código sin utilizar.
+
+```kotlin
+Observable<Response<CandidateInvolve>> verifyUser = ApiAdapterOB.getInvolveService().patchCandidate(auxLst, user.getToken());
+```
+
+El stack tecnológico actual:
+
+- Java
+- RxJava2
+- Retrofit
+- Gson
+- [ButterKnife](https://github.com/JakeWharton/butterknife) (Deprecated)
+
+> Attention: This tool is now deprecated. Please switch to view binding. Existing versions will continue to work, obviously, but only critical bug fixes for integration with AGP will be considered. Feature development and general bug fixes have stopped.
+
+- Lombok (Incompatibilidad con IDE Android Studio): Esta tecnología esta fuertemente ligada a Java y no permite que otros desarrolladores que no utilizan esta herramienta puedan trabajar de forma fácil, levantar el entorno y encontrar una versión compatible puede demorar horas.
+
