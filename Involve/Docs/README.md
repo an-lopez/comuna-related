@@ -223,14 +223,35 @@ Con información previa cargar el estado `https://dev.micros.involverh.com.mx/ma
 
 ### OCR
 
+### Paso 1: Selección de Archivo
+
+1. Revisar que se envíe correctamente a los dos endpoints
+	- `POST https://dev.micros.involverh.com.mx/files/extraccioncv/upload-files?typeFile=pdf`
+	- `POST https://dev.micros.involverh.com.mx/files/upload/uploadFile?typeFile=URL_CV`
+
 ### Paso 2
+1. Ajuste de endpoint para obtener `"extraccionCorrect":true` usando
+`GET https://dev.micros.involverh.com.mx/candidate/candidate`
+2. Ajuste de endpoint para resultados extracción
+`GET https://dev.micros.involverh.com.mx/files/extraccioncv/result-extraccioncv`
+3. Ajuste de endpoint para eliminar una experiencia laboral.
 
-1. Cambios de Endpoints
+`OPTIONS https://dev.micros.involverh.com.mx/files/extraccioncv/experience?experienceTTId=2c9f906e875cc6f7018781d767040013`
 
--
-### Dudas
+Body Request
 
-1. En los catálogos se envía un parámetro `status:true` ¿qué significa?
+```json
+[
+  {
+    "op": "replace",
+    "path": "/statusExperience",
+    "value": "DELETE"
+  }
+]
+```
+
+4. Botón validar experiencia laboral no se activa cuando se cargan los datos.
+
 
 -
 ### Changelog
@@ -238,8 +259,8 @@ Con información previa cargar el estado `https://dev.micros.involverh.com.mx/ma
 03/14/2023: 
 
 - Actualización de Endpoint en ciudades. Actualización de modelos de ciudades impacta a las siguientes clases: `Paso8.java`, `Paso9.java`, `Paso10.java`, `InformacionPersonal.java`, `CityAdapter.java`
+- Actualización OCR endpoint de subida y candidato para obtener cuándo está procesada la información del OCR.
 
--
 # Análisis
 
 La aplicación Involve RH carece de arquitectura, patrones de diseño, lineamientos de desarrollo de aplicaciones Android violando todos los principios y no permitiéndo un mantenimiento _fácil_ y reduciendo sus oportunidades de escalabilidad en gran manera. Tiene deuda técnica por todos lados, utiliza tecnología antigua comparado al tiempo de la fecha del último _commit_ visible en el proyecto. Existe poca o nula reutilización de código, en el código puedes ver esta misma sentencia al menos 11 veces, mismo nombre `verifyUser` sin tener sentido el nombre de la variable con la intención de la sentencia, sin agregar el `Disposable` a un `CompositeDisposable` permitiendo la ejecución de estas tareas asíncronas aún después de que la actividad no sea visible.
