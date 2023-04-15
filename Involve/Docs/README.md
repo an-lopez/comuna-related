@@ -53,8 +53,7 @@
 ```
 
 
-
-### Nacionalidad
+### ~~Nacionalidad~~
 
 1. Descargar catálogo con AutoCompleteTextView `https://dev.micros.involverh.com.mx/management/catalog/nationality/`
 
@@ -222,6 +221,12 @@ Con información previa cargar el estado `https://dev.micros.involverh.com.mx/ma
 ]
 ```
 
+### OCR
+
+### Paso 2
+
+1. Cambios de Endpoints
+
 -
 ### Dudas
 
@@ -247,11 +252,12 @@ Observable<Response<CandidateInvolve>> verifyUser = ApiAdapterOB.getInvolveServi
 
 El stack tecnológico actual:
 
-- Java
+- Java: No hay problema con el desarrollo en Java, puesto que Kotlin usa JVM para ejecutarse, sin embargo, Android es una plataforma Kotlin first, es decir, toda la documentación saldrá primero en Kotlin y después en Java, si es que se cree necesario.
 - RxJava2
 - Retrofit
 - Gson
 - [ButterKnife](https://github.com/JakeWharton/butterknife) (Deprecated)
+- Librerías de 3eros para ciertas vistas.
 
 > Attention: This tool is now deprecated. Please switch to view binding. Existing versions will continue to work, obviously, but only critical bug fixes for integration with AGP will be considered. Feature development and general bug fixes have stopped.
 
