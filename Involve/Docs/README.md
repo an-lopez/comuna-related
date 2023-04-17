@@ -202,7 +202,7 @@ Con información previa cargar el estado `https://dev.micros.involverh.com.mx/ma
 ]
 ```
 
-### Cuánto quieres ganar?
+### ~~Cuánto quieres ganar?~~
 
 1. Actualizar payload
 
@@ -250,16 +250,79 @@ Body Request
 ]
 ```
 
-4. Botón validar experiencia laboral no se activa cuando se cargan los datos.
+4. Botón validar experiencia laboral deshabilitado aún con experiencia laboral cargada.
+
+### Modificar experiencia laboral
+
+1. Modificar endpoint de catálogo de posiciones
+`GET https://dev.micros.involverh.com.mx/management/catalog/type-position`
+2. Eliminar petición para buscar `Nombre del puesto` cada vez que el usuario va ingresando el nombre, esto no pasa en Web.
+3. Actualizar endpoint a dónde se envía la información
+`POST https://dev.micros.involverh.com.mx/candidate/candidate/work-experience`
+
+```json
+[
+  {
+    "company": "strong",
+    "dateDeparture": "2019-01-01",
+    "dateEntry": "2015-01-01",
+    "dependents": false,
+    "functions": "asdasda dasd a dasdas dasdasd",
+    "numberDependents": "",
+    "position": {
+      "position": "asdasd"
+    },
+    "positionType": {
+      "positionTypeId": "40288086796be11e01796c18e3040061"
+    },
+    "working": false
+  }
+]
+```
 
 
--
-### Changelog
+### Modificar educación
 
-03/14/2023: 
+1. Modificar payload de endpoint
+`PATCH https://dev.micros.involverh.com.mx/files/extraccioncv/education?educationTTId=2c9f906e875cc6f701878652592000e8`
 
-- Actualización de Endpoint en ciudades. Actualización de modelos de ciudades impacta a las siguientes clases: `Paso8.java`, `Paso9.java`, `Paso10.java`, `InformacionPersonal.java`, `CityAdapter.java`
-- Actualización OCR endpoint de subida y candidato para obtener cuándo está procesada la información del OCR.
+```json
+[
+  {
+    "op": "replace",
+    "path": "/statusEducation",
+    "value": "SAVED"
+  },
+  {
+    "op": "replace",
+    "path": "/startYear",
+    "value": "2015"
+  },
+  {
+    "op": "replace",
+    "path": "/endYear",
+    "value": "2019"
+  },
+  {
+    "op": "replace",
+    "path": "/instituteName",
+    "value": "Instituto Tecnológico Superior de Cajeme"
+  },
+  {
+    "op": "replace",
+    "path": "/degree",
+    "value": "Software"
+  }
+]
+```
+
+### Vídeo entrevista
+
+Se actualiza la liga del candidato y la liga de dónde se carga el vídeo, además de actualizar los métodos para el proceso de creación del vídeo.
+
+`POST https://dev.micros.involverh.com.mx/files/upload/presentation-video`
+
+`GET https://dev.micros.involverh.com.mx/candidate/candidate`
 
 # Análisis
 
@@ -270,6 +333,8 @@ Si buscamos algo de principios SOLID dentro del código fallamos en todos, empez
 ```kotlin
 Observable<Response<CandidateInvolve>> verifyUser = ApiAdapterOB.getInvolveService().patchCandidate(auxLst, user.getToken());
 ```
+
+Los textos están escritos `en duro` en el código, lo cuál no permitiría la internacionalización de la aplicación. Hay `logs` por todos lados sin consistencia y sus textos no aportan valor.
 
 El stack tecnológico actual:
 
